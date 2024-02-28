@@ -1,0 +1,20 @@
+body{
+    height: 100vh;
+}
+.btn-primary{
+    background-color: #6102fb !important;
+}
+.blueColor{
+    color: #012970 !important;
+}
+.cardForm{
+    width: 500px;
+}
+.no-underline {
+    text-decoration: none;
+}
+@media screen and (max-width: 580px) {
+    .cardForm{
+        width: 80% !important;
+    }
+}
