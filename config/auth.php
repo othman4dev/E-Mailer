@@ -15,6 +15,7 @@ return [
 
     'defaults' => [
         'guard' => 'jwt',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
 
@@ -66,7 +67,6 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
         ],
 
         // 'users' => [
