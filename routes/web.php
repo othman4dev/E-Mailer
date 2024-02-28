@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', function () {
-    return view('admin.register');
+    return view('admin.category');
 });
 
 Route::post('/login', 'App\Http\Controllers\AuthController@login');
