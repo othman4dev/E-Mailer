@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SendMails;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,3 +22,4 @@ Route::post('/register', 'AuthController@register');
 Route::post('/logout', 'AuthController@logout');
 Route::get('/user', 'AuthController@user');
 Route::post('/refresh', 'AuthController@refresh');
+Route::get('/send',[SendMails::class,'send']);
