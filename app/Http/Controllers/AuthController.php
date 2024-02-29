@@ -4,87 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
-
-    public function login(Request $request)
+    /**
+     * Display a listing of the resource.
+     */
+    public function login()
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-        $credentials = $request->only('email', 'password');
-        $credentials = [
-            'email' => "rosenbaum.audreanne@example.com",
-            'password' => "password"
-        ];
-
-        $token = Auth::attempt($credentials, true);
-
-        if (!$token) {
+        $user = User::where('email', request('email'))->first();
+        if (!$user || !password_verify(request('password'), $user->password)) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
+                'message' => 'Unauthorized'
             ], 401);
+        } else {
+            $payload = [
+                "sub" => $user->id,
+            ];
+            $jwt = JWT::encode($payload, $_ENV['JWT_SECRET'], $_ENV['JWT_ALGO']);
+            dd(Cookie::get('token'));
+            return response()->json([
+                'message' => 'User registered successfully',
+                'token' => $jwt
+            ])->cookie(
+                'token', // the name of the cookie
+                $jwt, // the JWT token you are setting as the value
+                60
+            );
         }
-        $user = Auth::user();
-
-        $response = new Response('Set Cookie');
-        $response->withCookie(cookie('Jwt_token', $token, 60));
-        return $response;
     }
 
-    public function register(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'user' => $user,
-        ]);
+        //
     }
 
-    public function logout()
+    /**
+     * Display the specified resource.
+     */
+    public function show(User $user)
     {
-        Auth::logout();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Successfully logged out',
-        ]);
+        //
     }
 
-    public function me()
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, User $user)
     {
-        return response()->json([
-            'status' => 'success',
-            'user' => Auth::user(),
-        ]);
+        //
     }
 
-    public function refresh()
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(User $user)
     {
-        return response()->json([
-            'status' => 'success',
-            'user' => Auth::user(),
-            'authorisation' => [
-                'token' => Auth::refresh(),
-                'type' => 'bearer',
-            ]
-        ]);
+        //
     }
 }
