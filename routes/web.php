@@ -68,4 +68,3 @@ Route::get('/supnewsletter/{id}',[NewsLetterController::class,'deleteNewsletter'
 Route::get('/editnewletter/{id}',[NewsLetterController::class,'newsview']);
 Route::post('/updateewletter/{id}',[NewsLetterController::class,'update']);
 
-
