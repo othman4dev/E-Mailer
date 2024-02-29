@@ -15,7 +15,7 @@
                         </svg>
                         <span class="ml-2">Dashboard</span>
                     </a>
-                    <a href="/category"  class="nav-link rounded-1 fw-bold mt-2 p-3 active"  >
+                    <a href="/category"  class="nav-link rounded-1 fw-bold mt-2 p-3"  >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-view-list" viewBox="0 0 16 16">
                             <path d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2m0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14"/>
                         </svg>
@@ -27,7 +27,7 @@
                         </svg>
                         <span class="ml-2">mail</span>
                     </a>
-                    <a href="/newsletter"  class="nav-link rounded-1 fw-bold mt-2 p-3 active"  >
+                    <a href="/newsletter"  class="nav-link rounded-1 fw-bold mt-2 p-3"  >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-view-list" viewBox="0 0 16 16">
                             <path d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2m0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14"/>
                         </svg>
@@ -36,10 +36,28 @@
                 </div>
             </aside>
             <section class=" ml-2 ">
-
+                <div class="d-flex align-items-center justify-content-center gap-3 mt-4">
+                    <input type="search" name="searchmail" class="form-control" id="">
+                    <a href="/addmail" class="btn btn-primary">Add Mail</a>
+                    <script>
+                        const search = document.querySelector('input[name="searchmail"]');
+                        search.addEventListener('input', function(e){
+                            var xhtml = new XMLHttpRequest();
+                            xhtml.onreadystatechange = function(){
+                                if(this.readyState == 4 && this.status == 200){
+                                   
+                                    document.getElementById('allMail').innerHTML = this.responseText;
+                                }
+                            }
+                            if(search.value == '') xhtml.open('GET', '/searchMail/all', true);
+                            else xhtml.open('GET', '/searchMail/'+search.value, true);
+                            xhtml.send();
+                        });
+                    </script>
+                </div>
                 <table class="table align-middle mb-0 bg-white">
                       <thead class="bg-light">
-                          <a href="/addmail" class="btn btn-primary">Add Mail</a>
+                          
 
                           <tr>
                               <th>Id</th>
@@ -47,7 +65,7 @@
                               <th>Actions</th>
                           </tr>
                       </thead>
-                      <tbody>
+                      <tbody id="allMail">
                           @foreach ($mail as $item)
                           <tr>
                               <td>
@@ -71,6 +89,9 @@
 
                       </tbody>
                   </table>
+                    <div class="mt-4">
+                        {{$mail->links()}}
+                    </div>
               </section>
           </main>
           <script src="assets/script.js"></script>

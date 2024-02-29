@@ -35,7 +35,7 @@
                 </div>
             </aside>
 
-            <div class="container">
+            <div class="container pt-4">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <form action="/insert" method="post" class="needs-validation" novalidate>
@@ -44,10 +44,6 @@
                             <div class="mb-3">
                                 <label for="name" class="form-label">Name:</label>
                                 <input type="text" class="form-control" id="name" name="name" required placeholder="Please provide a name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description:</label>
-                                <textarea class="form-control" id="description" name="description" placeholder="Please provide a description"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

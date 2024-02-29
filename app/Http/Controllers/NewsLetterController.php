@@ -11,8 +11,9 @@ class NewsLetterController extends Controller
     // Display a listing of the newsletters.
     public function index()
     {
-        $newsletters = NewsLetter::with('categories')->get();
-        return view('admin.newsletter', compact('newsletters'));
+        $categories = Category::all();
+        $newsletters = NewsLetter::with('categories')->paginate(2);
+        return view('admin.newsletter', compact('newsletters', 'categories'));
     }
     public function addnewsletter()
     {
@@ -32,8 +33,11 @@ class NewsLetterController extends Controller
         $newsletter->name = $request->name;
         $newsletter->message = $request->message;
         $newsletter->save();
-
-        $newsletter->categories()->attach($request->category);
+        // $lastInsertId = $newsletter->id;
+        foreach ($request->category as $category) {
+            $newsletter->categories()->attach($category);
+        }
+        // $newsletter->categories()->attach($request->category);
 
         return redirect('/newsletter');
     }
@@ -50,9 +54,27 @@ public function newsview($id)
     return view('admin.updateletter', compact('data', 'categories'));
 }
 
-
-
-
+public function searchNewsletter($value)
+{
+    
+    if ($value == "all") {
+        $newsletters = NewsLetter::with('categories')->paginate(2);
+    } else {
+        $search = "%$value%";
+        $newsletters = NewsLetter::where('name', 'like', $search)->with('categories')->paginate(2);
+    }
+    return view('admin.searchLetter', compact('newsletters'));
+}
+public function FilterNewsletter($idCat){
+    if($idCat == "all") {
+        $newsletters = NewsLetter::with('categories')->paginate(2);
+    } else {
+        $newsletters = NewsLetter::whereHas('categories', function ($query) use ($idCat) {
+            $query->where('categories.id', $idCat);
+        })->with('categories')->paginate(2);
+    }
+    return view('admin.searchLetter', compact('newsletters'));
+}
 
 
 }
