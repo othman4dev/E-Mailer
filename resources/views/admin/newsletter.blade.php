@@ -36,8 +36,7 @@
                 </div>
             </aside>
             <section class=" ml-2 ">
-                <input type="text" name="search" placeholder="Rechercher...">
-                <button type="submit">Rechercher</button>
+     
 
               <table class="table align-middle mb-0 bg-white">
                     <thead class="bg-light">
