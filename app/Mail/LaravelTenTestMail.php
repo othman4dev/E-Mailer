@@ -8,18 +8,20 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
 
-class DemoMail extends Mailable implements ShouldQueue
+class LaravelTenTestMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $mailData;
+    public $data;
+
     /**
      * Create a new message instance.
      */
-    public function __construct($mailData)
+    public function __construct($data)
     {
-        $this->mailData = $mailData;
+        $this->data = $data;
     }
 
     /**
@@ -28,7 +30,8 @@ class DemoMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Demo Mail',
+            from: new Address('laravelia@example.com', 'Mahedi Hasan'),
+            subject: 'Laravel Ten Queue Test Mail',
         );
     }
 
@@ -38,7 +41,10 @@ class DemoMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.demoMail',
+            view: 'email.test',
+            with: [
+                'data' => $this->data
+            ]
         );
     }
 
@@ -47,8 +53,8 @@ class DemoMail extends Mailable implements ShouldQueue
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
-    public function attachments(): array
-    {
-        return [];
-    }
+    // public function attachments(): array
+    // {
+    //     return [];
+    // }
 }
