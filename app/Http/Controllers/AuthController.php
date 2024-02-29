@@ -25,24 +25,22 @@ class AuthController extends Controller
                 "sub" => $user->id,
             ];
             $jwt = JWT::encode($payload, $_ENV['JWT_SECRET'], $_ENV['JWT_ALGO']);
-            dd(Cookie::get('token'));
-            return response()->json([
-                'message' => 'User registered successfully',
-                'token' => $jwt
-            ])->cookie(
-                'token', // the name of the cookie
-                $jwt, // the JWT token you are setting as the value
-                60
-            );
+            $cookie = cookie('token', $jwt, 60);
+            return redirect()->to('/')->withCookie($cookie);
         }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function register(Request $request)
     {
-        //
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = password_hash($request->password, PASSWORD_DEFAULT);
+        $user->save();
+        return redirect('/login');
     }
 
     /**
