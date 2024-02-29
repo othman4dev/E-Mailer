@@ -9,7 +9,7 @@ class CategoryController extends Controller
     public function categoryviews()
 
     {
-        $category = Category::all();
+        $category = Category::paginate(2);
         // dd($category);
         return view('admin.category' ,compact('category'));
     }
@@ -21,7 +21,7 @@ class CategoryController extends Controller
     public function insert( Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required|unique:categories,name'
 
         ]);
         // dd($request);
@@ -38,6 +38,18 @@ class CategoryController extends Controller
     $category->find($id)->delete();
     return redirect("/category");
 
+}
+public function serachCategory($value)
+{
+    if($value == "all"){
+       $category = Category::get(); 
+    } 
+    else{
+        $serch = "%$value%";
+        $category = Category::where('name','like',$serch)->paginate(2);
+    }
+    
+    return view('admin.searchcategory',compact('category'));
 }
 public function editview($id)
 {

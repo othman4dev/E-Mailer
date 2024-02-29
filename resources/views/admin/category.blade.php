@@ -3,6 +3,7 @@
 <html lang="en">
     <head>
         @include('layouts.header')
+        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     </head>
     <body>
         <!-- Contenu du body -->
@@ -21,13 +22,13 @@
                         </svg>
                         <span class="ml-2">Category</span>
                     </a>
-                    <a href="/mail"  class="nav-link rounded-1 fw-bold mt-2 p-3 active"  >
+                    <a href="/mail"  class="nav-link rounded-1 fw-bold mt-2 p-3 "  >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-view-list" viewBox="0 0 16 16">
                             <path d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2m0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14"/>
                         </svg>
                         <span class="ml-2">Email</span>
                     </a>
-                    <a href="/newsletter"  class="nav-link rounded-1 fw-bold mt-2 p-3 active"  >
+                    <a href="/newsletter"  class="nav-link rounded-1 fw-bold mt-2 p-3 "  >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-view-list" viewBox="0 0 16 16">
                             <path d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2m0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14"/>
                         </svg>
@@ -36,25 +37,38 @@
                 </div>
             </aside>
             <section class=" ml-2 ">
-
+                <div class="d-flex align-items-center justify-content-center gap-3 mt-4">
+                    <input type="search" name="search" class="form-control w-25">
+                    <script>
+                        const search = document.querySelector('input[name="search"]');
+                        search.addEventListener('input', function(e){
+                            var xhtml = new XMLHttpRequest();
+                            xhtml.onreadystatechange = function(){
+                                if(this.readyState == 4 && this.status == 200){
+                                    document.getElementById('allCategory').innerHTML = this.responseText;
+                                }
+                            }
+                            if(search.value == '') xhtml.open('GET', '/searchCategory/all', true);
+                            else xhtml.open('GET', '/searchCategory/'+search.value, true);
+                            xhtml.send();
+                        });
+                    </script>
+                    <a href="/addcategory" class="btn btn-primary ">Add category</a>
+                </div>
               <table class="table align-middle mb-0 bg-white">
                     <thead class="bg-light">
-                        <a href="/addcategory" class="btn btn-primary">Add category</a>
+                        
 
                         <tr>
                             <th>Category Name</th>
-                            <th>Description</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id='allCategory'>
                         @foreach ($category as $item)
                         <tr>
                             <td>
                                 <p class="fw-normal mb-1">{{$item->name}}</p>
-                            </td>
-                            <td>
-                                <p >{{$item->decription}}</p>
                             </td>
                             <td >
                                <a href="/editcategory/{{$item->id}}"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="cursor-pointer bi bi-pencil-square" viewBox="0 0 16 16">
@@ -71,6 +85,10 @@
 
                     </tbody>
                 </table>
+                <div class="mt-4">
+
+                    {{$category->links()}}
+                </div>
             </section>
         </main>
         <script src="assets/script.js"></script>

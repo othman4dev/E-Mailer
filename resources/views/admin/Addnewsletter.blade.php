@@ -35,7 +35,7 @@
                 </div>
             </aside>
 
-            <div class="container">
+            <div class="container pt-4">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <form action="/insertnewsletter" method="post" class="needs-validation" novalidate>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="category" class="form-label">Category:</label>
-                                <select name="category" id="category" class="form-select" required>
+                                <select name="category[]" id="category" class="form-select" multiple required>
                                     <option value="">Select a category</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>

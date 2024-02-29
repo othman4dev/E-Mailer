@@ -10,7 +10,7 @@ class MailController extends Controller
     public function mailviews()
 
     {
-        $mail = Mail::all();
+        $mail = Mail::paginate(2);
         // dd($category);
         return view('admin.mail' ,compact('mail'));
     }
@@ -22,7 +22,7 @@ class MailController extends Controller
     public function insertmail( Request $request)
     {
         $request->validate([
-            'email' => 'required'
+            'email' => 'required|email|unique:mails,email'
 
         ]);
         // dd($request);
@@ -40,6 +40,18 @@ class MailController extends Controller
     return redirect('/mail');
 
 }
+public function searchMail($value)
+{
+    if($value == "all"){
+        $mail = Mail::paginate(2); 
+     } 
+     else{
+         $serch = "%$value%";
+         $mail = Mail::where('email','like',$serch)->paginate(2);
+     }
+     
+     return view('admin.searchMail',compact('mail'));
+}
 public function editview($id)
 {
    $data = Mail::find($id);
@@ -50,8 +62,7 @@ public function editview($id)
 public function updatemail(Request $request, $id)
 {
     $request->validate([
-        'email' => 'required',
-
+        'email' => 'required|email|unique:mails,email',
     ]);
 
     $mail = Mail::find($id);
