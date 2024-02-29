@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class NewsLetter_categorie extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 }
