@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class NewsLetter extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name', 'message'];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'news_letter_categories');
+    }
 }
+
+
